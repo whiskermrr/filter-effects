@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         ibBlur.setOnClickListener { boxBlur() }
         ibMedian.setOnClickListener { medianFilter() }
+        ibSobel.setOnClickListener { sobelEdgeDetection() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     private fun boxBlur() {
         val imageBitmap = (ivSelectedImage.drawable as BitmapDrawable).bitmap
         disposables.add(
-                BitmapFilters.boxBlur(imageBitmap)
+                BitmapFilters.applyBoxFilter(imageBitmap)
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { it ->
@@ -63,7 +64,19 @@ class MainActivity : AppCompatActivity() {
     private fun medianFilter() {
         val imageBitmap = (ivSelectedImage.drawable as BitmapDrawable).bitmap
         disposables.add(
-                BitmapFilters.medianFilter(imageBitmap)
+                BitmapFilters.applyMedianFilter(imageBitmap)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { it ->
+                            ivSelectedImage.setImageBitmap(it)
+                        }
+        )
+    }
+
+    private fun sobelEdgeDetection() {
+        val imageBitmap = (ivSelectedImage.drawable as BitmapDrawable).bitmap
+        disposables.add(
+                BitmapFilters.applySobelDetectionFilter(imageBitmap)
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { it ->
