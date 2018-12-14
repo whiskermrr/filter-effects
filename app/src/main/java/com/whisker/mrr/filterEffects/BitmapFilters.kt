@@ -1,4 +1,4 @@
-package com.whisker.mrr.filter_effects
+package com.whisker.mrr.filterEffects
 
 import android.graphics.*
 import io.reactivex.Single
@@ -29,8 +29,9 @@ class BitmapFilters {
                         for(n in -radius..radius) {
                             val pixelX = j + m
                             val pixelY = i + n
-                            if(pixelX in 0 until (imageBitmap.width - 1) && pixelY in 0 until (imageBitmap.height - 1)) {
-                                val pixel = pixels[imageBitmap.width * pixelY + pixelX]
+                            val pixelIndex = imageBitmap.width * pixelY + pixelX
+                            if((pixelIndex in 0 until  pixels.size)) {
+                                val pixel = pixels[pixelIndex]
                                 sumAlpha += Color.alpha(pixel)
                                 sumRed += Color.red(pixel)
                                 sumGreen += Color.green(pixel)
@@ -71,8 +72,9 @@ class BitmapFilters {
                             val pixelX = j + m
                             val pixelY = i + n
                             val currentIndex = (radius + m) * maskSize + (radius + n)
-                            val pixel = if(pixelX in 0 until (imageBitmap.width) && pixelY in 0 until (imageBitmap.height)) {
-                                pixels[imageBitmap.width * pixelY + pixelX]
+                            val pixelIndex = imageBitmap.width * pixelY + pixelX
+                            val pixel = if(pixelIndex in 0 until  pixels.size) {
+                                pixels[pixelIndex]
                             } else {
                                 pixels[imageBitmap.width * i + j]
                             }
@@ -124,14 +126,16 @@ class BitmapFilters {
                     arrayOf(0, 1),
                     arrayOf(1, 1)
             )
-            val width = imageBitmap.width - 1
-            val height = imageBitmap.height - 1
+            val width = imageBitmap.width
+            val height = imageBitmap.height
 
             for(i in 1 until height) {
                 for(j in 1 until width) {
                     var sumX = 0
                     var sumY = 0
                     for(k in 0 until directions.size) {
+                        val index = width * (i + directions[k][0]) + j + directions[k][1]
+                        if(index >= pixels.size) break
                         val pixel = pixels[width * (i + directions[k][0]) + j + directions[k][1]]
                         sumX += Color.red(pixel) * sobelX[k]
                         sumY += Color.red(pixel) * sobelY[k]

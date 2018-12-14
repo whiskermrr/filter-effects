@@ -1,4 +1,4 @@
-package com.whisker.mrr.filter_effects;
+package com.whisker.mrr.filterEffects;
 
 import org.junit.Test;
 

@@ -1,8 +1,7 @@
-package com.whisker.mrr.filter_effects
+package com.whisker.mrr.filterEffects
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.whisker.mrr.filter_effects;
+package com.whisker.mrr.filterEffects;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
