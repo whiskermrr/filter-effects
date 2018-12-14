@@ -1,7 +1,6 @@
 package com.whisker.mrr.filter_effects
 
 import android.graphics.*
-import android.util.Log
 import io.reactivex.Single
 
 class BitmapFilters {
@@ -114,7 +113,17 @@ class BitmapFilters {
 
             val sobelX = arrayOf(-1, -2, -1, 0, 0, 0, 1, 2, 1)
             val sobelY = arrayOf(-1, 0, 1, -2, 0, 2, -1, 0, 1)
-            val radius = 1
+            val directions = arrayOf(
+                    arrayOf(-1, -1),
+                    arrayOf(0, -1),
+                    arrayOf(1, -1),
+                    arrayOf(-1, 0),
+                    arrayOf(0, 0),
+                    arrayOf(1, 0),
+                    arrayOf(-1, 1),
+                    arrayOf(0, 1),
+                    arrayOf(1, 1)
+            )
             val width = imageBitmap.width - 1
             val height = imageBitmap.height - 1
 
@@ -122,14 +131,10 @@ class BitmapFilters {
                 for(j in 1 until width) {
                     var sumX = 0
                     var sumY = 0
-                    var index = 0
-                    for(m in -radius..radius) {
-                        for(n in -radius..radius) {
-                            val pixel = pixels[width * (i + (m + radius)) + (j + (n + radius))]
-                            sumX += Color.red(pixel) * sobelX[index]
-                            sumY += Color.red(pixel) * sobelY[index]
-                            index++
-                        }
+                    for(k in 0 until directions.size) {
+                        val pixel = pixels[width * (i + directions[k][0]) + j + directions[k][1]]
+                        sumX += Color.red(pixel) * sobelX[k]
+                        sumY += Color.red(pixel) * sobelY[k]
                     }
                     val newPx = Math.sqrt(Math.pow(sumX.toDouble(), 2.0) + Math.pow(sumY.toDouble(), 2.0)).toInt()
                     newPixels[width * i + j] = Color.rgb(newPx, newPx, newPx)
