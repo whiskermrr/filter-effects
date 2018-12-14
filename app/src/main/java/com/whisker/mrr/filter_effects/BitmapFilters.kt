@@ -115,20 +115,24 @@ class BitmapFilters {
             val sobelX = arrayOf(-1, -2, -1, 0, 0, 0, 1, 2, 1)
             val sobelY = arrayOf(-1, 0, 1, -2, 0, 2, -1, 0, 1)
             val radius = 1
+            val width = imageBitmap.width - 1
+            val height = imageBitmap.height - 1
 
-            for(i in 1 until imageBitmap.height - 1) {
-                for(j in 1 until imageBitmap.width - 1) {
+            for(i in 1 until height) {
+                for(j in 1 until width) {
                     var sumX = 0
                     var sumY = 0
+                    var index = 0
                     for(m in -radius..radius) {
                         for(n in -radius..radius) {
-                            val pixel = pixels[imageBitmap.width * (i + radius) + (j + radius)]
-                            sumX += Color.red(pixel) * sobelX[radius * (m + radius) + (n + radius)]
-                            sumY += Color.red(pixel) * sobelY[radius * (m + radius) + (n + radius)]
+                            val pixel = pixels[width * (i + (m + radius)) + (j + (n + radius))]
+                            sumX += Color.red(pixel) * sobelX[index]
+                            sumY += Color.red(pixel) * sobelY[index]
+                            index++
                         }
                     }
                     val newPx = Math.sqrt(Math.pow(sumX.toDouble(), 2.0) + Math.pow(sumY.toDouble(), 2.0)).toInt()
-                    newPixels[imageBitmap.width * i + j] = Color.rgb(newPx, newPx, newPx)
+                    newPixels[width * i + j] = Color.rgb(newPx, newPx, newPx)
                 }
             }
             imageBitmap.setPixels(newPixels, 0, imageBitmap.width, 0, 0, imageBitmap.width, imageBitmap.height)
