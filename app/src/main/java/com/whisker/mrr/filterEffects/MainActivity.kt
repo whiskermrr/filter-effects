@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             when(requestCode) {
                 PICK_IMAGE_CODE -> {
                     val imageUri = data.data!!
-                    ivSelectedImage.setImageURI(imageUri)
+                    Glide.with(this).load(imageUri).into(ivSelectedImage)
                 }
             }
         }
