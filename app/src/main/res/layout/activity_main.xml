@@ -43,6 +43,15 @@
         android:layout_margin="16dp"
         />
 
+    <ImageButton
+        android:id="@+id/ibDilatation"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@id/bPickImage"
+        app:layout_constraintStart_toEndOf="@id/ibSobel"
+        android:layout_margin="16dp"
+        />
+
     <Button
         android:id="@+id/bPickImage"
         app:layout_constraintStart_toStartOf="parent"

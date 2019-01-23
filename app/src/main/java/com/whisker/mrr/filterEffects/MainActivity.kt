@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         ibBlur.setOnClickListener { boxBlur() }
         ibMedian.setOnClickListener { medianFilter() }
         ibSobel.setOnClickListener { sobelEdgeDetection() }
+        ibDilatation.setOnClickListener { dilatation() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -74,6 +75,18 @@ class MainActivity : AppCompatActivity() {
         val imageBitmap = (ivSelectedImage.drawable as BitmapDrawable).bitmap
         disposables.add(
                 BitmapFilters.applySobelDetectionFilter(imageBitmap)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { it ->
+                            ivSelectedImage.setImageBitmap(it)
+                        }
+        )
+    }
+
+    private fun dilatation() {
+        val imageBitmap = (ivSelectedImage.drawable as BitmapDrawable).bitmap
+        disposables.add(
+                BitmapFilters.applyDilatation(imageBitmap)
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { it ->

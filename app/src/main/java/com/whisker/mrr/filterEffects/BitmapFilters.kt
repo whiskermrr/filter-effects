@@ -148,6 +148,30 @@ class BitmapFilters {
             return Single.just(imageBitmap)
         }
 
+        fun applyDilatation(bitmap: Bitmap) : Single<Bitmap> {
+            val scaledBitmap = getResizedBitmap(bitmap)
+            val pixels = IntArray(scaledBitmap.width * scaledBitmap.height)
+            scaledBitmap.getPixels(pixels, 0, scaledBitmap.width, 0, 0, scaledBitmap.width, scaledBitmap.height)
+            
+
+
+            scaledBitmap.setPixels(getBinaryPixels(pixels), 0, scaledBitmap.width, 0, 0, scaledBitmap.width, scaledBitmap.height)
+            return Single.just(scaledBitmap)
+        }
+
+        private fun getBinaryPixels(pixels: IntArray) : IntArray {
+            for(i in 0 until pixels.size) {
+                val pixel = pixels[i]
+                val gray = Color.blue(pixel)
+                if(gray > 127) {
+                    pixels[i] = Color.WHITE
+                } else {
+                    pixels[i] = Color.BLACK
+                }
+            }
+            return pixels
+        }
+
         private fun getResizedBitmap(bitmap: Bitmap) : Bitmap {
             val scaleSize = if(bitmap.width > bitmap.height) bitmap.width.toFloat() / 1000 else bitmap.height.toFloat() / 1000
 
